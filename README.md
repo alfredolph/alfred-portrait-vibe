@@ -30,6 +30,32 @@ Alfred 的个人视频制作技能。收到文案后，先用代码渲染同一�
 
 已移出：发布标题、话题、运营复盘及把封面强插到片头。风格和工具库按需参考，不整包导入大型风格库或多套渲染引擎。
 
+## 检查工具
+
+技能自带四个脚本，原则是**从产物里重新量一遍，不靠「检查过了」这句话**。它们不改内容，只报告哪里不合规。
+
+| 脚本 | 作用 | 什么时候跑 |
+| --- | --- | --- |
+| `qa.py` | 成片闸门：分辨率、帧率、时长、音轨、黑帧、削波逐项判定，并出联络表和锚点前后帧 | 第 7 步样片、第 8 步全片 |
+| `density.py` | 文案体检：字/秒、句/分、句长、口播腔、车轱辘话 | 第 3 步文案定稿后 |
+| `beats.py` | 拍点、小节线、每小节响度 | 只有选了 B5 配乐时 |
+| `bgm.py` | 纯 numpy 合成配乐，76–78 BPM 小调 | 只有选了 B5 且无现成配乐时 |
+
+```bash
+# 成片闸门：有 FAIL 时退出码为 1，不许交片
+python skills/alfred-portrait-vibe/scripts/qa.py final.mp4 plan.json \
+  --size 1080x1920 --fps 30 --anchor 3 12 27 -o qa
+
+# 文案体检（film=稀疏字幕片，dense=高密度解说）
+python skills/alfred-portrait-vibe/scripts/density.py 字幕.txt --duration 128 --genre film
+```
+
+依赖 `ffmpeg`/`ffprobe` 与 `numpy`；`density.py` 只用标准库。缺少依赖时如实说明缺口，不假装跑过。
+
+阈值、报红规则和已知陷阱见[量化闸门](skills/alfred-portrait-vibe/references/gates.md)与[毛病对照表](skills/alfred-portrait-vibe/references/pitfalls.md)。
+
+> **`beats.py` 的已知陷阱**：自动检测的偏好中心在 120 BPM，77 BPM 的配乐会被判成 154 BPM，小节线随之全部翻倍。自己用 `bgm.py` 合成的配乐**必须**用 `--bpm` 指定；看到 >140 或 <90 的警告要复核。
+
 ## 安装到 Codex
 
 将本仓库中的 `skills/alfred-portrait-vibe` 文件夹复制到 `$CODEX_HOME/skills/alfred-portrait-vibe`；未设置 `CODEX_HOME` 时使用用户目录下的 `.codex/skills/alfred-portrait-vibe`。新会话中调用：
@@ -38,6 +64,10 @@ Alfred 的个人视频制作技能。收到文案后，先用代码渲染同一�
 $alfred-portrait-vibe
 这是我的文案：……
 ```
+
+## 安装到 WorkBuddy
+
+复制到 `~/.workbuddy-ai/skills/alfred-portrait-vibe`（用户级，所有项目可用），或项目内的 `.workbuddy-ai/skills/alfred-portrait-vibe`（仅该项目）。新会话中提到「alfred Portrait vibe」或给出文案要求做视频即触发。
 
 这是技能指令包，不捆绑浏览器、渲染引擎、模型权重、付费服务账户或第三方完整组件库。实际制片使用当前环境可用工具；Breeze 服务缺失时报告具体缺口，不擅自更换配音引擎，也不以文字说明冒充真实试听。
 
@@ -53,9 +83,28 @@ skills/alfred-portrait-vibe/
     product.md
     generated-media.md
     production.md
+    gates.md          量化闸门：阈值与报红规则
+    pitfalls.md       毛病对照表与实测陷阱
+  scripts/
+    qa.py             成片闸门
+    density.py        文案体检
+    beats.py          拍点分析
+    bgm.py            配乐合成
 ```
 
 完整流程见 [SKILL.md](skills/alfred-portrait-vibe/SKILL.md)，Breeze 接入说明见 [生成素材指南](skills/alfred-portrait-vibe/references/generated-media.md)。
+
+## 更新记录
+
+**v1.1.0**（2026-11-03）
+
+- 新增 `scripts/` 工具层与两节参考（量化闸门、毛病对照表），接入第 7/8 步确认节点。
+- 重写成片自检：原版只打印 `ok`，不判定规格与时长；现为逐项 PASS/FAIL，有 FAIL 退出码 1。
+- 修 `beats.py` 八度错误：77 BPM 被检测为 154 BPM，小节线翻倍。
+- 修 `production.md` 中指向不存在的 `sfx-source.py` 的引用。
+- 移除音乐驱动的时间表工具：本技能的路线是配音驱动，两种排片方式并存会造成路线混乱。
+
+**v1.0.0** 初版：四图四声选型、个人风格预设、按配音定时、逐步确认。
 
 ## 参考来源
 
