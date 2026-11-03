@@ -1,4 +1,4 @@
-# Alfred vibe
+# alfred Portrait vibe
 
 Alfred 的个人视频制作技能。收到文案后，先用代码渲染同一个首分镜的四张视觉模板，并提供四个 Breeze TTS2 声音试听；由用户选定画面与声音，再逐步制作成片。
 
@@ -32,10 +32,10 @@ Alfred 的个人视频制作技能。收到文案后，先用代码渲染同一�
 
 ## 安装到 Codex
 
-将本仓库中的 `skills/alfred-vibe` 文件夹复制到 `$CODEX_HOME/skills/alfred-vibe`；未设置 `CODEX_HOME` 时使用用户目录下的 `.codex/skills/alfred-vibe`。新会话中调用：
+将本仓库中的 `skills/alfred-portrait-vibe` 文件夹复制到 `$CODEX_HOME/skills/alfred-portrait-vibe`；未设置 `CODEX_HOME` 时使用用户目录下的 `.codex/skills/alfred-portrait-vibe`。新会话中调用：
 
 ```text
-$alfred-vibe
+$alfred-portrait-vibe
 这是我的文案：……
 ```
 
@@ -44,7 +44,7 @@ $alfred-vibe
 ## 文件结构
 
 ```text
-skills/alfred-vibe/
+skills/alfred-portrait-vibe/
   SKILL.md
   agents/openai.yaml
   references/
@@ -55,7 +55,7 @@ skills/alfred-vibe/
     production.md
 ```
 
-完整流程见 [SKILL.md](skills/alfred-vibe/SKILL.md)，Breeze 接入说明见 [生成素材指南](skills/alfred-vibe/references/generated-media.md)。
+完整流程见 [SKILL.md](skills/alfred-portrait-vibe/SKILL.md)，Breeze 接入说明见 [生成素材指南](skills/alfred-portrait-vibe/references/generated-media.md)。
 
 ## 参考来源
 
