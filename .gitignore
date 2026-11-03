@@ -1,0 +1,19 @@
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Local dependencies and generated media
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+.cache/
+renders/
+out/
+audio/
+*.log
+Thumbs.db
+.DS_Store
